@@ -5,7 +5,7 @@ import { Building2, LogOut, Menu, ShieldCheck } from "lucide-react";
 import { AdvanceFlow } from "./components/AdvanceFlow";
 import { Login } from "./components/Login";
 import { SupabaseSetup } from "./components/SupabaseSetup";
-import { api } from "./lib/api";
+import { api, ApiError } from "./lib/api";
 import { supabase, supabaseConfigured } from "./lib/supabase";
 
 export default function App() {
@@ -16,15 +16,37 @@ export default function App() {
 
   useEffect(() => {
     if (!supabaseConfigured) return;
-    void supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
+    let cancelled = false;
+    let unsubscribe: (() => void) | undefined;
+
+    void (async () => {
+      const { data } = await supabase.auth.getSession();
+      let validSession = data.session;
+
+      if (validSession) {
+        const { error: userError } = await supabase.auth.getUser(validSession.access_token);
+        if (userError) {
+          const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
+          validSession = refreshError ? null : refreshed.session;
+        }
+      }
+
+      if (cancelled) return;
+      if (!validSession && data.session) await supabase.auth.signOut();
+      setSession(validSession);
       setLoading(false);
-    });
-    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      setSession(nextSession);
-      if (!nextSession) setBootstrap(null);
-    });
-    return () => data.subscription.unsubscribe();
+
+      const { data: authListener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+        setSession(nextSession);
+        if (!nextSession) setBootstrap(null);
+      });
+      unsubscribe = () => authListener.subscription.unsubscribe();
+    })();
+
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
   }, []);
 
   useEffect(() => {
@@ -32,7 +54,19 @@ export default function App() {
     setError("");
     void api.bootstrap(session)
       .then(setBootstrap)
-      .catch((requestError: unknown) => setError(requestError instanceof Error ? requestError.message : "Falha ao carregar."));
+      .catch(async (requestError: unknown) => {
+        if (requestError instanceof ApiError && requestError.code === "invalid_token") {
+          const { data, error: refreshError } = await supabase.auth.refreshSession();
+          if (!refreshError && data.session?.access_token !== session.access_token) {
+            setSession(data.session);
+            return;
+          }
+          await supabase.auth.signOut();
+          setError("");
+          return;
+        }
+        setError(requestError instanceof Error ? requestError.message : "Falha ao carregar.");
+      });
   }, [session]);
 
   if (!supabaseConfigured) return <SupabaseSetup />;

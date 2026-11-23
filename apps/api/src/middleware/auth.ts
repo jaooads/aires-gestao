@@ -17,6 +17,11 @@ export async function requireAuth(
     const token = authorization.slice("Bearer ".length);
     const { data, error } = await authClient.auth.getUser(token);
     if (error || !data.user) {
+      console.warn("Supabase recusou a sessão", {
+        code: error?.code,
+        status: error?.status,
+        message: error?.message,
+      });
       throw new AppError(401, "invalid_token", "Sessão inválida ou expirada.");
     }
 

@@ -8,7 +8,17 @@ import type {
 
 const baseUrl = import.meta.env.VITE_API_URL ?? "";
 
-type ApiErrorBody = { error?: { message?: string } };
+type ApiErrorBody = { error?: { code?: string; message?: string } };
+
+export class ApiError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly code: string,
+    message: string,
+  ) {
+    super(message);
+  }
+}
 
 async function request<T>(
   path: string,
@@ -26,7 +36,11 @@ async function request<T>(
 
   if (!response.ok) {
     const body = (await response.json().catch(() => ({}))) as ApiErrorBody;
-    throw new Error(body.error?.message ?? "Não foi possível concluir a operação.");
+    throw new ApiError(
+      response.status,
+      body.error?.code ?? "unknown_error",
+      body.error?.message ?? "Não foi possível concluir a operação.",
+    );
   }
   return (await response.json()) as T;
 }
