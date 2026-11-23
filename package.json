@@ -1,0 +1,21 @@
+{
+  "name": "aires-gestao",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n API,WEB -c blue,green \"npm run dev -w @aires/api\" \"npm run dev -w @aires/web\"",
+    "build": "npm run build -w @aires/shared && npm run build -w @aires/api && npm run build -w @aires/web",
+    "test": "npm run test -w @aires/api",
+    "typecheck": "npm run typecheck -w @aires/shared && npm run typecheck -w @aires/api && npm run typecheck -w @aires/web"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "typescript": "^5.9.3"
+  }
+}
+
