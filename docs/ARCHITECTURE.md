@@ -4,6 +4,7 @@
 
 - Interface React + TypeScript, mobile-first e instalável como PWA em uma etapa posterior.
 - Supabase Auth para identidade e PostgreSQL para dados financeiros.
+- Dados do produto isolados nos schemas `aires` e `aires_private`, permitindo compartilhar uma instância Supabase sem misturar tabelas.
 - API Node.js + TypeScript como única porta de escrita financeira.
 - OpenAI Responses API apenas no backend. A assinatura ChatGPT Plus não é usada como crédito de API.
 - Todo lançamento sugerido pela IA vira uma proposta temporária e exige confirmação humana.
@@ -49,6 +50,7 @@ Ficam para as próximas entregas: telas completas de cadastro, apuração semana
 
 - Chaves `OPENAI_API_KEY` e `SUPABASE_SECRET_KEY` existem somente na API.
 - O frontend recebe apenas URL do Supabase e chave publicável.
+- O schema `aires` é a única superfície de dados exposta ao app; `aires_private` contém auxiliares de autorização e permanece fora da Data API.
 - Tabelas expostas usam RLS e o cliente autenticado recebe somente leitura do próprio tenant.
 - Toda escrita financeira exige a API, papel autorizado e validação de schema.
 - A auditoria guarda ator, ação, entidade e metadados, sem armazenar segredos.

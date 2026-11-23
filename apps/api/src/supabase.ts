@@ -13,6 +13,7 @@ export const adminClient = createClient(
   config.SUPABASE_URL,
   config.SUPABASE_SECRET_KEY,
   {
+    db: { schema: config.SUPABASE_DB_SCHEMA },
     auth: { autoRefreshToken: false, persistSession: false },
   },
 );
