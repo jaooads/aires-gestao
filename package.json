@@ -8,6 +8,7 @@
     "packages/*"
   ],
   "scripts": {
+    "predev": "npm run build -w @aires/shared",
     "dev": "concurrently -n API,WEB -c blue,green \"npm run dev -w @aires/api\" \"npm run dev -w @aires/web\"",
     "build": "npm run build -w @aires/shared && npm run build -w @aires/api && npm run build -w @aires/web",
     "test": "npm run test -w @aires/api",
