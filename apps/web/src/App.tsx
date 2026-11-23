@@ -4,8 +4,9 @@ import type { BootstrapResponse } from "@aires/shared";
 import { Building2, LogOut, Menu, ShieldCheck } from "lucide-react";
 import { AdvanceFlow } from "./components/AdvanceFlow";
 import { Login } from "./components/Login";
+import { SupabaseSetup } from "./components/SupabaseSetup";
 import { api } from "./lib/api";
-import { supabase } from "./lib/supabase";
+import { supabase, supabaseConfigured } from "./lib/supabase";
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -14,6 +15,7 @@ export default function App() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (!supabaseConfigured) return;
     void supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setLoading(false);
@@ -33,6 +35,7 @@ export default function App() {
       .catch((requestError: unknown) => setError(requestError instanceof Error ? requestError.message : "Falha ao carregar."));
   }, [session]);
 
+  if (!supabaseConfigured) return <SupabaseSetup />;
   if (loading) return <div className="loading-page">Carregando…</div>;
   if (!session) return <Login />;
 

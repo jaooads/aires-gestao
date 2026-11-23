@@ -50,6 +50,26 @@ textarea { resize: vertical; line-height: 1.55; }
 .security-note { color: #85918d; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 24px; }
 .form-error, .page-error { color: var(--danger); background: #fff0ed; border: 1px solid #f0cac4; padding: 11px 13px; border-radius: 10px; font-size: 13px; margin: 0; }
 
+.setup-page { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at 80% 10%, rgba(232,179,79,.17), transparent 25%), linear-gradient(145deg, #edf1ea, #f7f4e9); }
+.setup-card { width: min(580px, 100%); background: rgba(255,255,255,.96); border: 1px solid #dce3da; border-radius: 24px; padding: clamp(26px, 6vw, 46px); box-shadow: 0 24px 70px rgba(29,65,54,.11); }
+.setup-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 38px; color: var(--green-950); }
+.setup-brand > span { width: 41px; height: 41px; display: grid; place-items: center; background: var(--gold); border-radius: 11px; }
+.setup-brand > div { display: grid; line-height: 1; }
+.setup-brand strong { font: 800 19px 'Manrope'; }
+.setup-brand small { margin-top: 5px; font-size: 8px; letter-spacing: .16em; color: #71817b; }
+.setup-icon { width: 55px; height: 55px; display: grid; place-items: center; color: var(--green-600); background: #e8f1eb; border-radius: 16px; margin-bottom: 22px; }
+.setup-card h1 { font-size: clamp(29px, 6vw, 39px); margin-bottom: 12px; }
+.setup-copy { color: var(--muted); line-height: 1.6; margin: 0; max-width: 480px; }
+.setup-steps { list-style: none; padding: 0; margin: 30px 0 22px; display: grid; gap: 12px; }
+.setup-steps li { display: flex; gap: 13px; align-items: flex-start; padding: 14px; background: #f7f8f5; border: 1px solid #e7ebe5; border-radius: 13px; }
+.setup-steps li > span { flex: 0 0 auto; width: 27px; height: 27px; display: grid; place-items: center; color: white; background: var(--green-800); border-radius: 50%; font-size: 12px; font-weight: 800; }
+.setup-steps div { display: grid; gap: 4px; }
+.setup-steps strong { font-size: 13px; color: #274a40; }
+.setup-steps small { color: #7a8883; line-height: 1.5; }
+.setup-steps code { font: 600 11px ui-monospace, monospace; color: var(--green-800); background: #e8eee9; padding: 2px 5px; border-radius: 4px; }
+.setup-note { display: flex; align-items: center; gap: 9px; color: #6d633b; background: #faf6e8; border: 1px solid #ece2ba; border-radius: 11px; padding: 11px 13px; font-size: 12px; margin-bottom: 20px; }
+.setup-card .primary-button { width: 100%; justify-content: center; }
+
 .app-shell { min-height: 100vh; display: flex; flex-direction: column; background: radial-gradient(circle at 85% 5%, rgba(232,179,79,.12), transparent 24%), #f2f3ed; }
 .topbar { height: 72px; padding: 0 clamp(20px, 5vw, 72px); background: var(--green-950); color: white; display: flex; align-items: center; justify-content: space-between; }
 .topbar-brand { display: flex; align-items: center; gap: 11px; }
