@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
-import { ArrowRight, Building2, LockKeyhole } from "lucide-react";
+import { ArrowRight, LockKeyhole } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { BrandLogo } from "./BrandLogo";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -20,8 +21,7 @@ export function Login() {
   return (
     <main className="auth-page">
       <section className="brand-panel">
-        <div className="brand-mark"><Building2 size={28} /></div>
-        <p className="eyebrow">AIRES CONSTRUÇÕES</p>
+        <BrandLogo />
         <h1>Gestão clara.<br />Obra no controle.</h1>
         <p className="brand-copy">Vales, despesas e recebimentos organizados em um só lugar.</p>
       </section>
