@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { organizationRoleSchema, type OrganizationRole } from "@aires/shared";
 import { AppError } from "../errors.js";
-import { adminClient, authClient } from "../supabase.js";
+import { adminClient } from "../supabase.js";
 
 export async function requireAuth(
   req: Request,
@@ -15,7 +15,10 @@ export async function requireAuth(
     }
 
     const token = authorization.slice("Bearer ".length);
-    const { data, error } = await authClient.auth.getUser(token);
+    // Validate the bearer token with the server-only client. This keeps the
+    // secret out of the browser while avoiding differences between the new
+    // publishable key format and server-side Auth validation.
+    const { data, error } = await adminClient.auth.getUser(token);
     if (error || !data.user) {
       console.warn("Supabase recusou a sessão", {
         code: error?.code,
